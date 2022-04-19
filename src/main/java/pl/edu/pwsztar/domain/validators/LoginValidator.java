@@ -6,9 +6,9 @@ import java.util.regex.Pattern;
 public class LoginValidator {
 
     public static boolean isValid(final String login) {
-        final int LOGIN_MAX_LENGTH = 4;
+        final int LOGIN_MIN_LENGTH = 4;
 
-        if(login == null || login.length() < LOGIN_MAX_LENGTH) {
+        if(login == null || login.length() < LOGIN_MIN_LENGTH) {
             return false;
         }
 
