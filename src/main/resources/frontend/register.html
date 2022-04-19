@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>it movies</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/header.css">
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script type="text/javascript">
+        function resetErrors() {
+            $("label").removeClass("error");
+        }
+
+        function showErrors(errorFields) {
+            errorFields.forEach(function(item) {
+                $('#'+item + "-label").addClass("error");
+            });
+        }
+
+        function registerUser() {
+            var user = {
+                login: $("#login").val(),
+                firstName: $("#firstName").val(),
+                lastName: $("#lastName").val(),
+                password: $("#password").val(),
+                pesel: $("#pesel").val()
+            };
+
+            resetErrors();
+
+            $.ajax({
+                url: 'http://127.0.0.1:8080/api/users/register',
+                type: 'post',
+                contentType: 'application/json',
+                success: function (data) {
+                    console.log('data: ', data);
+                    $('#target').html("<b style='color: green;'>Dane zostały zapisane na serwerze :-)</b><br>");
+                },
+                error: function(jqXhr, textStatus, errorThrown) {
+                    console.log('error: ', jqXhr.responseText.split(","));
+
+                    $('#target').html("<b style='color: red;'>Formularz zawiera błędy!</b><br>");
+                    var errorFields = jqXhr.responseText.split(",");
+                    showErrors(errorFields)
+                },
+                data: JSON.stringify(user)
+            });
+        }
+
+        $(document).ready(function() {
+
+            $("#register-user").submit(function(e) {
+                e.preventDefault();
+                registerUser();
+            });
+        });
+
+    </script>
+</head>
+
+<body>
+    <header>
+        <div class="header-title">
+            <h1>Rejestracja użytkownika</h1>
+        </div><div class="header-counter-button">&nbsp;</div><div class="header-button" id="back">&nbsp;</div>
+    </header>
+
+    <div class="messages" id="target"></div>
+
+    <div class="form-data">
+        <form name="register-user" id="register-user">
+
+            <label id="login-label" for="login">Login:<br/></label><input id="login" name="login" type="text"/><br/>
+            <label id="firstName-label" for="firstName">Imię:<br/></label><input id="firstName" name="firstName" type="text"/><br/>
+            <label id="lastName-label" for="lastName">Nazwisko:<br/></label><input id="lastName" name="lastName" type="text"/><br/>
+            <label id="password-label" for="password">Hasło:<br/></label><input id="password" name="password" type="text"/><br/>
+            <label id="pesel-label" for="pesel">PESEL:<br/></label><input id="pesel" name="pesel" type="text"/><br/>
+
+            <button type="submit" style="margin-top: 30px; width: 100%;" class="btn">Zapisz</button>
+        </form>
+    </div>
+</body>
+</html>
