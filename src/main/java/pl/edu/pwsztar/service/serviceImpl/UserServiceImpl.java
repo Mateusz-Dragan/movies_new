@@ -6,8 +6,7 @@ import org.springframework.stereotype.Service;
 import pl.edu.pwsztar.domain.dto.RegisterUserDto;
 import pl.edu.pwsztar.domain.dto.ResponseData;
 import pl.edu.pwsztar.domain.forms.RegisterFormFields;
-import pl.edu.pwsztar.domain.validators.FirstNameValidator;
-import pl.edu.pwsztar.domain.validators.LoginValidator;
+import pl.edu.pwsztar.domain.validators.*;
 import pl.edu.pwsztar.service.UserService;
 
 @Service
@@ -28,7 +27,17 @@ public class UserServiceImpl implements UserService {
             responseData.addErrorFieldName(RegisterFormFields.FIRST_NAME.fieldName());
         }
 
-        // ... prosze dokonczyc implementacje ...
+        if(!LastNameValidator.isValid(registerUserDto.getLastName())) {
+            responseData.addErrorFieldName(RegisterFormFields.LAST_NAME.fieldName());
+        }
+
+        if(!PasswordValidator.isValid(registerUserDto.getPassword())) {
+            responseData.addErrorFieldName(RegisterFormFields.PASSWORD.fieldName());
+        }
+
+        if(!PeselValidator.isValid(registerUserDto.getPesel())) {
+            responseData.addErrorFieldName(RegisterFormFields.PESEL.fieldName());
+        }
 
         return responseData;
     }
